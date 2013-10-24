@@ -3,10 +3,10 @@
 	<title>Otra p&aacute;gina</title>
 </head>
 <body>
-	<p><a href="index.html">P&aacute;gina principal</a>
-	<?php
+	<p><a href="index.php">P&aacute;gina principal</a>
+	<p><?php
 		include 'cuentavisitas.php';
-		echo cuentavisitas();
-	?>
+		cuentavisitas();
+	?></p>
 </body>
 </html>
