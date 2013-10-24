@@ -20,8 +20,6 @@
 		}
 		else echo 'Usuario y/o contraseña incorrectos';
 	}
-	/*visualizar();
-	visualizarAlumno('Soriano, Juan');*/
 ?>
 </body>
 </html>
