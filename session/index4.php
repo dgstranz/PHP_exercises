@@ -17,8 +17,8 @@
 		echo 'Sus idiomas son ';
 		foreach($_SESSION['idioma'] as $key => $idioma) {
 			echo $idioma;
-			if($key < $num-1) echo ', ';
-			elseif ($key == $num-1) echo ' y ';
+			if($key < $num-2) echo ', ';
+			elseif ($key == $num-2) echo ' y ';
 			else echo '.';
 		}
 	}
