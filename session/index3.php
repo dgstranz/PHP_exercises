@@ -8,10 +8,11 @@
 	session_start();
 	include 'checkName.php';
 
-	if(isValid($_REQUEST['apellido'])) {
-		$_SESSION['apellido'] = $_REQUEST['apellido'];
+	function print_data() {
 		echo 'Su nombre es '.$_SESSION['nombre'].' '.$_SESSION['apellido'].'.';
+	}
 
+	function print_form() {
 		$idiomas=['español', 'inglés', 'francés', 'checo', 'alemán', 'ruso'];
 		echo '
 			<form action="index4.php" method="post">
@@ -26,9 +27,9 @@
 				<input type="reset" value="Borrar" />
 				<input type="submit" value="Next" />
 			</form>';
-	} else {
-		header('Location: '.$_SERVER['HTTP_REFERER']);
 	}
+
+	validate('apellido');
 ?>
 
 </body>

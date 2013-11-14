@@ -7,9 +7,10 @@
 
 <?php
 	session_start();
+	session_destroy();
 
-	if(isset($_SERVER['HTTP_REFERER'])) {
-		echo 'Ha introducido un nombre incorrecto';
+	if(isset($_SERVER['REQUEST_URI']) && ($_SERVER['REQUEST_URI'] === $_SERVER['PHP_SELF'])) {
+		echo 'Ha introducido un nombre incorrecto. Sólo se admiten letras, guiones, apóstrofos y espacios.';
 	}
 	echo '
 	<form action="index2.php" method="post">

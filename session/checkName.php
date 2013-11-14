@@ -27,4 +27,21 @@ function isValid($string) {
 		return false;
 	}
 }
+
+function validate($data) {
+	if(isset($_SESSION[$data])) {
+	print_form();
+	} elseif (isset($_REQUEST[$data])) {
+		if(isValid($_REQUEST[$data])) {
+			$_SESSION[$data] = $_REQUEST[$data];
+			print_data();
+			print_form();
+		} else {
+			header('Location: '.$_SERVER['HTTP_REFERER']);
+		}
+	} else {
+		header('location: gotoindex.php');
+	}
+}
+
 ?>

@@ -10,16 +10,19 @@
 	echo 'Su nombre es '.$_SESSION['nombre'].' '.$_SESSION['apellido'].'.<br>';
 	if(isset($_REQUEST['idioma'])) {
 		$num=count($_REQUEST['idioma']);
-		echo $num;
 		for($i=0; $i < $num; $i++) {
 			$_SESSION['idioma'][$i] = $_REQUEST['idioma'][$i];
 		}
-		echo 'Sus idiomas son ';
-		foreach($_SESSION['idioma'] as $key => $idioma) {
-			echo $idioma;
-			if($key < $num-2) echo ', ';
-			elseif ($key == $num-2) echo ' y ';
-			else echo '.';
+		if($num == 1) {
+			echo 'Ha seleccionado el '.$_SESSION['idioma'][0].'.';
+		} else {
+			echo 'Sus idiomas son ';
+			foreach($_SESSION['idioma'] as $key => $idioma) {
+				echo $idioma;
+				if($key < $num-2) echo ', ';
+				elseif ($key == $num-2) echo ' y ';
+				else echo '.';
+			}
 		}
 	}
 	else echo 'No ha seleccionado ningún idioma.';
