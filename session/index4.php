@@ -18,11 +18,17 @@
 		} else {
 			echo 'Sus idiomas son ';
 			foreach($_SESSION['idioma'] as $key => $idioma) {
+				if ($key > 0 && $key < $num-1) echo ', ';
+				elseif ($key == $num-1) {
+					if (preg_match('/^h?i/', $idioma)) {
+						echo ' e ';
+					} else {
+						echo ' y ';
+					}
+				}
 				echo $idioma;
-				if($key < $num-2) echo ', ';
-				elseif ($key == $num-2) echo ' y ';
-				else echo '.';
 			}
+			echo '.';
 		}
 	}
 	else echo 'No ha seleccionado ningún idioma.';
