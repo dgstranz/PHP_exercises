@@ -21,6 +21,11 @@
 		</form>';
 	}
 
+	if(isset($_SESSION['error_apellido'])) {
+		echo 'Ha introducido un apellido incorrecto. Sólo se admiten letras, guiones, apóstrofos y espacios.';
+		unset($_SESSION['error_apellido']);
+	}
+
 	validate('nombre');
 ?>
 

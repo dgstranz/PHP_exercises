@@ -37,7 +37,8 @@ function validate($data) {
 			print_data();
 			print_form();
 		} else {
-			header('Location: '.$_SERVER['HTTP_REFERER']);
+			$_SESSION['error_'.$data] = true;
+			header('location: '.$_SERVER['HTTP_REFERER']);
 		}
 	} else {
 		header('location: gotoindex.php');
