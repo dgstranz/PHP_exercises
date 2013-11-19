@@ -31,7 +31,7 @@
 	}
 
 	function is_email($email) {
-		if (preg_match('/^([a-zA-Z0-9]+[\.-_+])*[a-zA-Z0-9]+@\w+\.([a-zA-z]+\.)*[a-zA-Z]{2,6}$/', $email)) {
+		if (preg_match('/^([a-zA-Z0-9]+[\.\-_+])*[a-zA-Z0-9]+@\w+\.([a-zA-z]+\.)*[a-zA-Z]{2,6}$/', $email)) {
 			return true;
 		} else {
 			return false;
