@@ -4,27 +4,18 @@
 </head>
 <body>
 <?php
-	$year = -1;
-	$month = -1;
-	$day = -1;
-	$hour = -1;
-	$minute = -1;
-	$title = "";
-	$comment = "";
 	$params = ['year', 'month', 'day', 'hour', 'minute', 'title', 'comment'];
+	foreach ($params as $param) {
+		if (isset($_POST[$param])) {
+			$$param = $_POST[$param];
+		}
+	}
 
 	function print_form($params) {
 		echo '<form action="index.php?operacion=confirmar" method="POST">';
 		foreach ($params as $param) {
 			print_field($param);
 		}
-		/*print_field('year');
-		print_field('month');
-		print_field('day');
-		print_field('hour');
-		print_field('minute');
-		print_field('title');
-		print_field('comment');*/
 		echo '<input type="submit" />';
 		echo '</form>';
 	}
@@ -58,7 +49,7 @@
 				break;
 			case 'hour':
 				echo 'Hora: <select name="hour">';
-				echo '<option value="0"></option>';
+				echo '<option value="-1"></option>';
 				for($i = 0; $i <= 23 ; $i++) {
 					echo '<option value="'.$i.'">'.$i.'</option>';
 				}
@@ -66,7 +57,7 @@
 				break;
 			case 'minute':
 				echo '<select name="minute">';
-				echo '<option value="0"></option>';
+				echo '<option value="-1"></option>';
 				for($i = 0; $i <= 11 ; $i++) {
 					echo '<option value="'.(5*$i).'">'.(5*$i).'</option>';
 				}
@@ -87,34 +78,31 @@
 
 	function validate() {
 		global $year, $month, $day, $hour, $minute, $title, $comment;
-		if (isset($_REQUEST['year'])) {
-			$year = $_REQUEST['year'];
-		}
-		if (isset($_REQUEST['month'])) {
-			$month = $_REQUEST['month'];
-		}
-		if (isset($_REQUEST['day'])) {
-			$day = $_REQUEST['day'];
-		}
-		if (isset($_REQUEST['hour'])) {
-			$hour = $_REQUEST['hour'];
-		}
-		if (isset($_REQUEST['minute'])) {
-			$minute = $_REQUEST['minute'];
-		}
-		if (isset($_REQUEST['title'])) {
-			$title = $_REQUEST['title'];
-		}
-		if (isset($_REQUEST['comment'])) {
-			$comment = $_REQUEST['comment'];
-		}
+		$printing_form = false;
 		if (!checkdate($month, $day, $year)) {
-			echo '<font color="red">Fecha incorrecta.</font><br>';
+			echo '<form action="index.php?operacion=confirmar" method="POST">';
+			$printing_form = true;
+			echo '<font color="red">Debe introducirse una fecha válida.</font><br>';
 			print_field('year');
 			print_field('month');
 			print_field('day');
+		}
+		if ($hour < 0 || $hour > 23 || $minute < 0 || $minute > 59 || $minute % 5 != 0) {
+			echo '<form action="index.php?operacion=confirmar" method="POST">';
+			$printing_form = true;
+			echo '<font color="red">Debe introducirse una hora válida.</font><br>';
+			print_field('hour');
+			print_field('minute');
+		}
+		if ($printing_form) {
+			echo '<input type="submit" />';
+			echo '</form>';
 		} else {
-			echo 'Datos enviados correctamente.';
+			echo 'Datos enviados correctamente.<br>';
+			echo 'Fecha: '.$day.'/'.$month.'/'.$year.'<br>';
+			echo 'Hora: '.$hour.':'.$minute.'<br>';
+			echo 'Título: '.$title.'<br>';
+			echo 'Comentario: '.$comment;
 		}
 	}
 
