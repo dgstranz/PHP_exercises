@@ -4,17 +4,27 @@
 </head>
 <body>
 <?php
-	$params = ['year', 'month', 'day', 'hour', 'minute', 'title', 'comment'];
+	$year = -1;
+	$month = -1;
+	$day = -1;
+	$hour = -1;
+	$minute = -1;
+	$title = "";
+	$comment = "";
+	$params = [&$year, &$month, &$day, &$hour, &$minute, &$title, &$comment];
 
 	function isValid() {
-		global $params;
-		$complete;
-		foreach ($params as $param) {
+		global $year, $month, $day, $hour, $minute, $title, $comment;
+		$complete = true;
+		if (!checkdate($month, $day, $year)) $complete = false;
+		/*foreach ($params as $param) {
 			if (!isset($_REQUEST[$param])) {
 				$complete = false;
-				break;
+			} else {
+				$params[$param] = $_REQUEST[$param];
 			}
-		}
+			if (!isset($params[$month]) || !isset($params[$day]) || !isset($params[$year])) $complete = false;
+		}*/
 		return $complete;
 	}
 
@@ -33,7 +43,7 @@
 			case 'year':
 				echo 'Año: <select name="year">';
 				if (isset($_REQUEST['year'])) echo '<option value="'.$_REQUEST['year'].'" selected>'.$_REQUEST['year'].'</option>';
-				echo '<option value=""></option>';
+				echo '<option></option>';
 				for($i = 2000; $i <= 2037 ; $i++) {
 					echo '<option value="'.$i.'">'.$i.'</option>';
 				}
@@ -89,8 +99,31 @@
 		}
 	}
 
+	if (isset($_REQUEST['year'])) {
+		$year = $_REQUEST['year'];
+	}
+	if (isset($_REQUEST['month'])) {
+		$month = $_REQUEST['month'];
+	}
+	if (isset($_REQUEST['day'])) {
+		$day = $_REQUEST['day'];
+	}
+	if (isset($_REQUEST['hour'])) {
+		$hour = $_REQUEST['hour'];
+	}
+	if (isset($_REQUEST['minute'])) {
+		$minute = $_REQUEST['minute'];
+	}
+	if (isset($_REQUEST['title'])) {
+		$title = $_REQUEST['title'];
+	}
+	if (isset($_REQUEST['comment'])) {
+		$comment = $_REQUEST['comment'];
+	}
 	if (!isValid()) {
 		print_form();
+	} else {
+		echo 'Datos enviados correctamente.';
 	}
 ?>
 </body>
