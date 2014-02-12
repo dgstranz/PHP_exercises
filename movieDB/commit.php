@@ -5,37 +5,36 @@
 <body>
 <?php
 function exists_movie($movie) {
-	$select = "SELECT * FROM movie WHERE movie_name = '$movie'";
-	$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
+	$query = "SELECT * FROM movie WHERE movie_name = '$movie'";
+	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	$line = mysql_fetch_array($result, MYSQL_ASSOC);
 	mysql_free_result($result);
-	return $line;
+	return !empty($line);
 }
 
 function exists_people($people) {
-	$select = "SELECT * FROM people WHERE people_fullname = '$people'";
-	$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
+	$query = "SELECT * FROM people WHERE people_fullname = '$people'";
+	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	$line = mysql_fetch_array($result, MYSQL_ASSOC);
 	mysql_free_result($result);
-	return $line;
+	return !empty($line);
 }
 
 function add_movie($movie, $genre, $year, $actor, $director) {
-	$select = "INSERT INTO movie (movie_name, movie_type, movie_year, movie_leadactor, movie_director)
-				VALUES ($movie, $genre, $year, $actor, $director)";
-	$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
-	$line = mysql_fetch_array($result, MYSQL_ASSOC);
+	$query = 'INSERT INTO movie (movie_name, movie_type, movie_year, movie_leadactor, movie_director)
+				VALUES ('.$movie.', '.$genre.', '.$year.', '.$actor.', '.$director.')';
+	echo $query;
+	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	mysql_free_result($result);
-	return true;
+	return $result;
 }
 
 function add_people($people, $isactor, $isdirector) {
-	$select = "INSERT INTO people (people_fullname, people_isactor, people_isdirector)
-				VALUES ($people, $isactor, $isdirector)";
-	$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
-	$line = mysql_fetch_array($result, MYSQL_ASSOC);
+	$query = "INSERT INTO people (people_fullname, people_isactor, people_isdirector)
+				VALUES ('$people', '$isactor', '$isdirector')";
+	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	mysql_free_result($result);
-	return true;
+	return $result;
 }
 
 function add_actor($people) {
@@ -47,63 +46,49 @@ function add_director($people) {
 }
 
 function make_actor($people) {
-	$select = "UPDATE people
+	$query = "UPDATE people
 				SET people_isactor=1
 				WHERE people_fullname=$people";
-	$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
-	$line = mysql_fetch_array($result, MYSQL_ASSOC);
+	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	mysql_free_result($result);
-	return true;
+	return $result;
 }
 
 function make_director($people) {
-	$select = "UPDATE people
+	$query = "UPDATE people
 				SET people_isdirector=1
 				WHERE people_fullname=$people";
-	$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
-	$line = mysql_fetch_array($result, MYSQL_ASSOC);
+	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	mysql_free_result($result);
-	return true;
-}
-
-if (!empty($_REQUEST['movie']) &&
-	!empty($_REQUEST['year']) &&
-	!empty($_REQUEST['director']) &&
-	!empty($_REQUEST['actor'])) {
-	$movie = $_REQUEST['movie'];
-	$genre = $_REQUEST['genre'];
-	$year = $_REQUEST['year'];
-	$director = $_REQUEST['director'];
-	$actor = $_REQUEST['actor'];
-} else {
-	header('Location: '.$_SERVER['HTTP_REFERER']);
+	return $result;
 }
 
 // Open connection, select DB and execute the query
 $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . mysql_error());
 mysql_select_db('movies') or die('Couldn\'t select database.');
 
+if (!empty($_REQUEST['movie']) &&
+	!empty($_REQUEST['year']) &&
+	!empty($_REQUEST['actor']) &&
+	!empty($_REQUEST['director'])) {
+	$movie = $_REQUEST['movie'];
+	$genre = $_REQUEST['genre'];
+	$year = $_REQUEST['year'];
+	$actor = $_REQUEST['actor'];
+	$director = $_REQUEST['director'];
+} else {
+	header('Location: '.$_SERVER['HTTP_REFERER']);
+}
+
 $var_movie = exists_movie($movie);
 $var_actor = exists_people($actor);
 $var_director = exists_people($director);
 
+var_dump($_REQUEST);
 var_dump($var_movie);
+
 if (!$var_movie) {
-	if (!$var_actor) {
-		add_actor($actor);
-	} else {
-		if (!$var_actor['people_isactor']) {
-			make_actor($actor);
-		}
-	}
-	if (!$var_director) {
-		add_director($director);
-	} else {
-		if (!$var_director['people_isactor']) {
-			make_director($director);
-		}
-	}
-	add_movie($movie);
+	add_movie($movie, $genre, $year, $actor, $director);
 }
 
 // Close connection
