@@ -4,8 +4,6 @@
 </head>
 <body>
 <?php
-include 'functions.php';
-
 // Abrir la conexión, seleccionar la base de datos y realizar la consulta
 $handle = mysql_connect('localhost', 'root', '') or die('No se pudo conectar: ' . mysql_error());
 mysql_select_db('movies') or die('No se pudo seleccionar la base de datos.');

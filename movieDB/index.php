@@ -4,8 +4,6 @@
 </head>
 <body>
 <?php
-include 'functions.php';
-
 // Open connection
 $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t establish a connection: ' . mysql_error());
 

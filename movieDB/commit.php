@@ -4,8 +4,6 @@
 </head>
 <body>
 <?php
-include 'functions.php';
-
 function exists_movie($movie) {
 	$select = "SELECT * FROM movie WHERE movie_name = '$movie'";
 	$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
