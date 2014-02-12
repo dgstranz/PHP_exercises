@@ -6,10 +6,10 @@
 <?php
 include 'functions.php';
 
-// Abrir la conexión
-$handle = mysql_connect('localhost', 'root', '') or die('No se pudo conectar: ' . mysql_error());
+// Open connection
+$handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t establish a connection: ' . mysql_error());
 
-// Crear la BD y las tablas
+// Create DB and tables
 $database = "CREATE DATABASE IF NOT EXISTS movies";
 
 $movie = "CREATE TABLE IF NOT EXISTS movie (
@@ -44,7 +44,7 @@ $insert_movie = "INSERT INTO movie (movie_id, movie_name, movie_type, movie_year
 		 (3, 'Grand Canyon', 2, 1991, 4, 3)";
 
 $insert_movietype = "INSERT INTO movietype (movietype_id, movietype_label)
-			VALUES (1,'Sci Fi'),
+			VALUES (1, 'Sci Fi'),
 		 (2, 'Drama'),
 		 (3, 'Adventure'),
 		 (4, 'War'),
@@ -62,31 +62,55 @@ $insert_people = "INSERT INTO people
 		 (5, 'Ron Livingston', 1, 0),
 		 (6, 'Mike Judge', 0, 1)";
 
-$result_database = mysql_query($database) or die('Error al crear la BD: ' . mysql_error());
-mysql_select_db('movies') or die('No se pudo seleccionar la base de datos.');
+$result_database = mysql_query($database) or die('Error creating the database: ' . mysql_error());
+mysql_select_db('movies') or die('Couldn\'t select the database.');
 
-$result_movie = mysql_query($movie) or die('Error al crear la tabla: ' . mysql_error());
-$result_movietype = mysql_query($movietype) or die('Error al crear la tabla: ' . mysql_error());
-$result_people = mysql_query($people) or die('Error al crear la tabla: ' . mysql_error());
+$result_movie = mysql_query($movie) or die('Error creating the table: ' . mysql_error());
+$result_movietype = mysql_query($movietype) or die('Error creating the table: ' . mysql_error());
+$result_people = mysql_query($people) or die('Error creating the table: ' . mysql_error());
 mysql_query($insert_movie);
 mysql_query($insert_movietype);
 mysql_query($insert_people);
 
-$select = "SELECT movie_id, movie_name, movie_year FROM movie ORDER BY movie_id";
-$result = mysql_query($select) or die('Error al hacer la consulta: ' . mysql_error());
+$select_movie = "SELECT movie_id, movie_name, movie_year FROM movie ORDER BY movie_id";
+$result_movie = mysql_query($select_movie) or die('Couldn\'t execute query: ' . mysql_error());
 
-// Imprimir los resultados en HTML
-echo '<h1>Películas</h1>';
-while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
-	echo '<ul>';
-	echo '<li><a href="pelis.php?id='.$line['movie_id'].'">'.$line['movie_name'].'</a> ('.$line['movie_year'].')</li>';
-	echo '</ul>';
+$select_people = "SELECT * FROM people ORDER BY people_fullname";
+$result_people = mysql_query($select_people) or die('Couldn\'t execute query: ' . mysql_error());
+
+// Print results in HTML
+echo '<table border="1px solid #888">';
+echo '<tr style="background-color: #bdf"><td colspan="3" align="center"><font size=+2><b>Movies</b></font> [<a href="add_movie.php">ADD</a>]</td></tr>';
+$lines_printed = 0;
+while ($line = mysql_fetch_array($result_movie, MYSQL_ASSOC)) {
+	echo '<tr';
+	if ($lines_printed % 2 == 1) echo ' style="background-color: #eee"';
+	echo '>';
+	echo '<td><a href="display_movie.php?id='.$line['movie_id'].'">'.$line['movie_name'].'</a> ('.$line['movie_year'].')</td>';
+	echo '<td>[<a href="edit_movie.php?id='.$line['movie_id'].'">EDIT</a>]</td>';
+	echo '<td>[<a href="delete_movie.php?id='.$line['movie_id'].'">DELETE</a>]</td>';
+	echo '</tr>';
+	$lines_printed++;
 }
+echo '<tr style="background-color: #bdf"><td colspan="3" align="center"><font size=+2><b>People</b></font> [<a href="add_person.php">ADD</a>]</td></tr>';
+$lines_printed = 0;
+while ($line = mysql_fetch_array($result_people, MYSQL_ASSOC)) {
+	echo '<tr';
+	if ($lines_printed % 2 == 1) echo ' style="background-color: #eee"';
+	echo '>';
+	echo '<td>'.$line['people_fullname'].'</td>';
+	echo '<td>[<a href="edit_person.php?id='.$line['people_id'].'">EDIT</a>]</td>';
+	echo '<td>[<a href="delete_person.php?id='.$line['people_id'].'">DELETE</a>]</td>';
+	echo '</tr>';
+	$lines_printed++;
+}
+echo '</table>';
 
-// Liberar resultados
-mysql_free_result($result);
+// Free results
+mysql_free_result($result_movie);
+mysql_free_result($result_people);
 
-// Cerrar la conexión
+// Close connection
 mysql_close($handle);
 ?>
 </body>

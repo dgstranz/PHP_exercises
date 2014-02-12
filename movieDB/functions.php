@@ -1,6 +1,5 @@
 <?php
-// Estas funciones son para obtener las cadenas de texto que interesan al usuario a partir de los ID
-// de los campos de la tabla movie.
+// We'll use these functions to give the user more relevant data (strings) than raw IDs
 
 function get_type($movie_type) {
 	$select = 'SELECT movietype_label FROM movietype WHERE movietype_id = '.$movie_type;
