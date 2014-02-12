@@ -4,13 +4,11 @@
 </head>
 <body>
 <?php
-// Abrir la conexión, seleccionar la base de datos y realizar la consulta
-$handle = mysql_connect('localhost', 'root', '') or die('No se pudo conectar: ' . mysql_error());
-mysql_select_db('movies') or die('No se pudo seleccionar la base de datos.');
-$select = 'SELECT * FROM movietype ORDER BY movietype_label';
-$result = mysql_query($select) or die('Error al hacer la consulta: ' . mysql_error());
+// Open connection, select database and execute query
+$handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . mysql_error());
+mysql_select_db('movies') or die('Couldn\'t select database.');
 
-// Formulario
+// Form
 echo '
 	<form action="commit.php" method="post">
 		<table>
@@ -22,11 +20,14 @@ echo '
 				<td>Genre:</td>
 				<td><select name="genre">';
 
+$select = 'SELECT movietype_id, movietype_label FROM movietype ORDER BY movietype_label';
+$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
 $i=0;
 while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
 	$i++;
 	echo '<option value="'.$line['movietype_id'].'">'.$line['movietype_label'].'</option>';
 }
+mysql_free_result($result);
 
 echo '</select></td>
 			</tr>
@@ -36,11 +37,33 @@ echo '</select></td>
 			</tr>
 			<tr>
 				<td>Director:</td>
-				<td><input type="text" name="director" /></td>
+				<td><select name="director">';
+
+$select = 'SELECT people_id, people_fullname, people_isdirector FROM people WHERE people_isdirector > 0 ORDER BY people_fullname';
+$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
+$i=0;
+while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	$i++;
+	echo '<option value="'.$line['people_id'].'">'.$line['people_fullname'].'</option>';
+}
+mysql_free_result($result);
+
+echo '</select> <a href="add_people.php">Not here?</a></td>
 			</tr>
 			<tr>
 				<td>Lead actor:</td>
-				<td><input type="text" name="actor" /></td>
+				<td><select name="actor">';
+
+$select = 'SELECT people_id, people_fullname, people_isactor FROM people WHERE people_isactor > 0 ORDER BY people_fullname';
+$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
+$i=0;
+while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	$i++;
+	echo '<option value="'.$line['people_id'].'">'.$line['people_fullname'].'</option>';
+}
+mysql_free_result($result);
+
+echo '</select> <a href="add_people.php">Not here?</a></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -49,10 +72,7 @@ echo '</select></td>
 		</table>
 	</form>';
 
-// Liberar resultados
-mysql_free_result($result);
-
-// Cerrar la conexión
+// Close connection
 mysql_close($handle);
 ?>
 </body>
