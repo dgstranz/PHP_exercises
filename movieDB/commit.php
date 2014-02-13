@@ -21,19 +21,16 @@ function exists_people($people) {
 }
 
 function add_movie($movie, $genre, $year, $actor, $director) {
-	$query = 'INSERT INTO movie (movie_name, movie_type, movie_year, movie_leadactor, movie_director)
-				VALUES ('.$movie.', '.$genre.', '.$year.', '.$actor.', '.$director.')';
-	echo $query;
+	$query = "INSERT INTO movie (movie_name, movie_type, movie_year, movie_leadactor, movie_director)
+				VALUES ('$movie', $genre, $year, $actor, $director)";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
-	mysql_free_result($result);
 	return $result;
 }
 
 function add_people($people, $isactor, $isdirector) {
 	$query = "INSERT INTO people (people_fullname, people_isactor, people_isdirector)
-				VALUES ('$people', '$isactor', '$isdirector')";
+				VALUES ('$people', $isactor, $isdirector)";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
-	mysql_free_result($result);
 	return $result;
 }
 
@@ -77,18 +74,18 @@ if (!empty($_REQUEST['movie']) &&
 	$actor = $_REQUEST['actor'];
 	$director = $_REQUEST['director'];
 } else {
+	echo 'The form is not filled.';
+	sleep(5);
 	header('Location: '.$_SERVER['HTTP_REFERER']);
 }
 
-$var_movie = exists_movie($movie);
-$var_actor = exists_people($actor);
-$var_director = exists_people($director);
-
-var_dump($_REQUEST);
-var_dump($var_movie);
-
-if (!$var_movie) {
+if (!exists_movie($movie)) {
 	add_movie($movie, $genre, $year, $actor, $director);
+	echo 'Movie added.';
+} else {
+	echo 'Movie already exists.';
+	sleep(5);
+	header('Location: '.$_SERVER['HTTP_REFERER']);
 }
 
 // Close connection
