@@ -66,13 +66,15 @@ function make_director($people) {
 $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . mysql_error());
 mysql_select_db('movies') or die('Couldn\'t select database.');
 
-$_SESSION['movie'] = $_REQUEST['movie'];
-$_SESSION['genre'] = $_REQUEST['genre'];
-$_SESSION['year'] = $_REQUEST['year'];
-$_SESSION['actor'] = $_REQUEST['actor'];
-$_SESSION['director'] = $_REQUEST['director'];
+// Pass parameters to session and count empty fields
+$fields = ['movie', 'genre', 'year', 'director', 'actor'];
+$empty_fields = 0;
+foreach ($fields as $value) {
+	$_SESSION[$value] = $_REQUEST[$value];
+	if (empty($_SESSION[$value])) $empty_fields++;
+}
 
-if (empty($_SESSION['movie']) || empty($_SESSION['genre']) || empty($_SESSION['year']) || empty($_SESSION['actor']) || empty($_SESSION['director'])) {
+if ($empty_fields) {
 	echo 'The form is not filled.<br />';
 	//sleep(5);
 	//header('Location: '.$_SERVER['HTTP_REFERER']);
@@ -80,7 +82,7 @@ if (empty($_SESSION['movie']) || empty($_SESSION['genre']) || empty($_SESSION['y
 	add_movie($_SESSION['movie'], $_SESSION['genre'], $_SESSION['year'], $_SESSION['actor'], $_SESSION['director']);
 	echo 'Movie added.<br />';
 } else {
-	echo 'Movie already exists.<br />';
+	echo 'A movie called '.$_SESSION['movie'].' already exists in our database.<br />';
 }
 
 // Close connection
