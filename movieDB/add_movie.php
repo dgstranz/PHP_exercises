@@ -6,6 +6,8 @@
 <?php
 session_start();
 
+include 'functions.php';
+
 var_dump($_SESSION);
 
 // Open connection, select database and execute query
@@ -37,11 +39,16 @@ echo '</select></td>
 			</tr>
 			<tr>
 				<td>Year:</td>
-				<td><input type="number" name="year" value="'.date('Y').'" min="1890" max="'.date('Y').'" value="'.(0+$_SESSION['year']).'" /></td>
+				<td><input type="number" name="year" value="'.(isset($_SESSION['year']) ? $_SESSION['year'] : date('Y')).'" min="1890" max="'.date('Y').'" /></td>
 			</tr>
 			<tr>
 				<td>Director:</td>
 				<td><select name="director">';
+
+if(isset($_SESSION['director'])) {
+	echo '<option value="'.$_SESSION['director'].'">'.get_person($_SESSION['director']).'</option>';
+}
+echo '<option value=""></option>';
 
 $select = 'SELECT people_id, people_fullname, people_isdirector FROM people WHERE people_isdirector > 0 ORDER BY people_fullname';
 $result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
@@ -57,6 +64,11 @@ echo '</select> <a href="add_people.php">Not here?</a></td>
 			<tr>
 				<td>Lead actor:</td>
 				<td><select name="actor">';
+
+if(isset($_SESSION['actor'])) {
+	echo '<option value="'.$_SESSION['actor'].'">'.get_person($_SESSION['actor']).'</option>';
+}
+echo '<option value=""></option>';
 
 $select = 'SELECT people_id, people_fullname, people_isactor FROM people WHERE people_isactor > 0 ORDER BY people_fullname';
 $result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
