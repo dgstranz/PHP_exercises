@@ -67,7 +67,7 @@ $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . 
 mysql_select_db('movies') or die('Couldn\'t select database.');
 
 // Pass parameters to session and count empty fields
-$fields = ['movie', 'genre', 'year', 'director', 'actor'];
+$fields = ['movie_name', 'movie_type', 'movie_year', 'movie_director', 'movie_leadactor'];
 $empty_fields = 0;
 foreach ($fields as $value) {
 	$_SESSION[$value] = $_REQUEST[$value];
@@ -78,11 +78,11 @@ if ($empty_fields) {
 	echo 'The form is not filled.<br />';
 	//sleep(5);
 	//header('Location: '.$_SERVER['HTTP_REFERER']);
-} else if (!exists_movie($_SESSION['movie'])) {
-	add_movie($_SESSION['movie'], $_SESSION['genre'], $_SESSION['year'], $_SESSION['actor'], $_SESSION['director']);
+} else if (!exists_movie($_SESSION['movie_name'])) {
+	add_movie($_SESSION['movie_name'], $_SESSION['movie_type'], $_SESSION['movie_year'], $_SESSION['movie_actor'], $_SESSION['movie_director']);
 	echo 'Movie added.<br />';
 } else {
-	echo 'A movie called '.$_SESSION['movie'].' already exists in our database.<br />';
+	echo 'A movie called '.$_SESSION['movie_name'].' already exists in our database.<br />';
 }
 
 // Close connection

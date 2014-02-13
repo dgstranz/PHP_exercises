@@ -76,11 +76,11 @@ function print_movie_form($default_array, $destination_uri) {
 		<form action="'.$destination_uri.'" method="post">
 			<table>';
 
-	movie_title_field($default_array['movie']);
-	movie_genre_field($default_array['genre']);
-	movie_year_field($default_array['year']);
-	movie_director_field($default_array['director']);
-	movie_actor_field($default_array['actor']);
+	movie_title_field($default_array['movie_name']);
+	movie_genre_field($default_array['movie_type']);
+	movie_year_field($default_array['movie_year']);
+	movie_director_field($default_array['movie_director']);
+	movie_actor_field($default_array['movie_leadactor']);
 				
 	echo '			<tr>
 					<td></td>
