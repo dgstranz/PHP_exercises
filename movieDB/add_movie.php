@@ -4,6 +4,10 @@
 </head>
 <body>
 <?php
+session_start();
+
+var_dump($_SESSION);
+
 // Open connection, select database and execute query
 $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . mysql_error());
 mysql_select_db('movies') or die('Couldn\'t select database.');
@@ -33,7 +37,7 @@ echo '</select></td>
 			</tr>
 			<tr>
 				<td>Year:</td>
-				<td><input type="number" name="year" value="'.date('Y').'" min="1890" max="'.date('Y').'" /></td>
+				<td><input type="number" name="year" value="'.date('Y').'" min="1890" max="'.date('Y').'" value="'.(0+$_SESSION['year']).'" /></td>
 			</tr>
 			<tr>
 				<td>Director:</td>
