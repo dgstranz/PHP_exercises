@@ -72,7 +72,7 @@ $_SESSION['year'] = $_REQUEST['year'];
 $_SESSION['actor'] = $_REQUEST['actor'];
 $_SESSION['director'] = $_REQUEST['director'];
 
-if (empty($_REQUEST['movie'])) {
+if (empty($_SESSION['movie']) || empty($_SESSION['genre']) || empty($_SESSION['year']) || empty($_SESSION['actor']) || empty($_SESSION['director'])) {
 	echo 'The form is not filled.<br />';
 	//sleep(5);
 	//header('Location: '.$_SERVER['HTTP_REFERER']);

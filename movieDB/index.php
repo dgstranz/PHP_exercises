@@ -77,7 +77,7 @@ $select_people = "SELECT * FROM people ORDER BY people_fullname";
 $result_people = mysql_query($select_people) or die('Couldn\'t execute query: ' . mysql_error());
 
 // Print results in HTML
-echo '<table border="1px solid #888">';
+echo '<table>';
 echo '<tr style="background-color: #bdf"><td colspan="3" align="center"><font size=+2><b>Movies</b></font> [<a href="add_movie.php">ADD</a>]</td></tr>';
 $lines_printed = 0;
 while ($line = mysql_fetch_array($result_movie, MYSQL_ASSOC)) {
