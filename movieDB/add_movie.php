@@ -14,14 +14,11 @@ foreach ($fields as $value) {
 include 'functions/id_to_string.php';
 include 'functions/movie_form.php';
 
-
-var_dump($_SESSION);
-
 // Open connection, select database and execute query
 $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . mysql_error());
 mysql_select_db('movies') or die('Couldn\'t select database.');
 
-print_movie_form($_SESSION, 'commit.php');
+print_movie_form($_SESSION, 'commit.php?action=add&object=movie');
 
 // Close connection
 mysql_close($handle);
