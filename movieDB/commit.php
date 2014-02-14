@@ -83,35 +83,43 @@ if ($_REQUEST['object'] == 'movie') {
 			echo 'The form is not filled.<br />';
 			//sleep(5);
 			//header('Location: '.$_SERVER['HTTP_REFERER']);
-		} else if (!exists_movie($_SESSION['movie_name'])) {
+		} else if (exists_movie($_SESSION['movie_name'])) {
+			echo 'A movie called '.$_SESSION['movie_name'].' already exists in our database.<br />';
+		} else {
 			add_movie($_SESSION['movie_name'], $_SESSION['movie_type'], $_SESSION['movie_year'], $_SESSION['movie_leadactor'], $_SESSION['movie_director']);
 			echo 'Movie added.<br />';
-		} else {
-			echo 'A movie called '.$_SESSION['movie_name'].' already exists in our database.<br />';
 		}
 	}
 } else if ($_REQUEST['object'] == 'person') {
 	if ($_REQUEST['action'] == 'add') {
-		var_dump($_SESSION);
-		$fields = ['people_fullname', 'people_isactor', 'people_isdirector'];
 		$req_fields = ['people_fullname'];
 		$empty_req_fields = 0;
-		foreach ($fields as $value) {
-			$_SESSION[$value] = $_REQUEST[$value];
-		}
+		$job_checkboxes = ['people_isactor', 'people_isdirector'];
+		$job_counter = 0;
 		foreach ($req_fields as $value) {
+			$_SESSION[$value] = $_REQUEST[$value];
 			if (empty($_SESSION[$value])) $empty_req_fields++;
+		}
+		foreach ($job_checkboxes as $value) {
+			if (!empty($_REQUEST[$value])) {
+				$_SESSION[$value] = 1;
+				$job_counter++;
+			} else {
+				$_SESSION[$value] = 0;
+			}
 		}
 
 		if ($empty_req_fields) {
 			echo 'The form is not filled.<br />';
 			//sleep(5);
 			//header('Location: '.$_SERVER['HTTP_REFERER']);
-		} else if (!exists_person($_SESSION['people_fullname'])) {
-			add_person($_SESSION['people_fullname'], $_SESSION['people_isactor'] ? '1' : '0', $_SESSION['people_isdirector'] ? '1' : '0');
-			echo 'Person added.<br />';
-		} else {
+		} else if (exists_person($_SESSION['people_fullname'])) {
 			echo 'A person called '.$_SESSION['people_fullname'].' already exists in our database.<br />';
+		} else if ($job_counter == 0) {
+			echo 'Cannot add people with no job.<br />';
+		} else {
+			add_person($_SESSION['people_fullname'], isset($_SESSION['people_isactor']) ? '1' : '0', isset($_SESSION['people_isdirector']) ? '1' : '0');
+			echo 'Person added.<br />';
 		}
 	}
 }
