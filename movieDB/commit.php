@@ -93,8 +93,8 @@ if ($_REQUEST['object'] == 'movie') {
 } else if ($_REQUEST['object'] == 'person') {
 	if ($_REQUEST['action'] == 'add') {
 		var_dump($_SESSION);
-		$fields = ['person_fullname', 'person_isactor', 'person_isdirector'];
-		$req_fields = ['person_fullname'];
+		$fields = ['people_fullname', 'people_isactor', 'people_isdirector'];
+		$req_fields = ['people_fullname'];
 		$empty_req_fields = 0;
 		foreach ($fields as $value) {
 			$_SESSION[$value] = $_REQUEST[$value];
@@ -103,15 +103,15 @@ if ($_REQUEST['object'] == 'movie') {
 			if (empty($_SESSION[$value])) $empty_req_fields++;
 		}
 
-		if ($empty_fields) {
+		if ($empty_req_fields) {
 			echo 'The form is not filled.<br />';
 			//sleep(5);
 			//header('Location: '.$_SERVER['HTTP_REFERER']);
-		} else if (!exists_person($_SESSION['person_fullname'])) {
-			add_person($_SESSION['person_fullname'], $_SESSION['person_isactor'], $_SESSION['person_isdirector']);
+		} else if (!exists_person($_SESSION['people_fullname'])) {
+			add_person($_SESSION['people_fullname'], $_SESSION['people_isactor'] ? '1' : '0', $_SESSION['people_isdirector'] ? '1' : '0');
 			echo 'Person added.<br />';
 		} else {
-			echo 'A person called '.$_SESSION['person_fullname'].' already exists in our database.<br />';
+			echo 'A person called '.$_SESSION['people_fullname'].' already exists in our database.<br />';
 		}
 	}
 }
