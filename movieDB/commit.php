@@ -22,16 +22,16 @@ function exists_people($people) {
 	return !empty($line);
 }
 
-function add_movie($movie, $genre, $year, $actor, $director) {
+function add_movie($movie_name, $movie_type, $movie_year, $movie_leadactor, $movie_director) {
 	$query = "INSERT INTO movie (movie_name, movie_type, movie_year, movie_leadactor, movie_director)
-				VALUES ('$movie', $genre, $year, $actor, $director)";
+				VALUES ('$movie_name', $movie_type, $movie_year, $movie_leadactor, $movie_director)";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	return $result;
 }
 
-function add_people($people, $isactor, $isdirector) {
+function add_people($people_fullname, $people_isactor, $people_isdirector) {
 	$query = "INSERT INTO people (people_fullname, people_isactor, people_isdirector)
-				VALUES ('$people', $isactor, $isdirector)";
+				VALUES ('$people_fullname', $people_isactor, $people_isdirector)";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	return $result;
 }
@@ -79,7 +79,7 @@ if ($empty_fields) {
 	//sleep(5);
 	//header('Location: '.$_SERVER['HTTP_REFERER']);
 } else if (!exists_movie($_SESSION['movie_name'])) {
-	add_movie($_SESSION['movie_name'], $_SESSION['movie_type'], $_SESSION['movie_year'], $_SESSION['movie_actor'], $_SESSION['movie_director']);
+	add_movie($_SESSION['movie_name'], $_SESSION['movie_type'], $_SESSION['movie_year'], $_SESSION['movie_leadactor'], $_SESSION['movie_director']);
 	echo 'Movie added.<br />';
 } else {
 	echo 'A movie called '.$_SESSION['movie_name'].' already exists in our database.<br />';
