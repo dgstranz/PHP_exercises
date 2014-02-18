@@ -8,6 +8,7 @@ session_start();
 
 include 'functions/id_to_string.php';
 include 'functions/movie_form.php';
+include 'variables/fields.php';
 
 // Open connection, select database and execute query
 $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . mysql_error());
@@ -17,7 +18,7 @@ $select = 'SELECT * FROM movie WHERE movie_id='.$_GET['id'];
 $result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
 $line = mysql_fetch_array($result, MYSQL_ASSOC);
 
-$fields = ['movie_id', 'movie_name', 'movie_type', 'movie_year', 'movie_director', 'movie_leadactor'];
+$fields = $edit_movie_fields;
 $movie = [];
 $empty_fields = 0;
 foreach ($fields as $value) {

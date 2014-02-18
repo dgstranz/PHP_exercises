@@ -6,6 +6,8 @@
 <?php
 session_start();
 
+include 'variables/fields.php';
+
 function exists_movie($movie, $id) {
 	$query = "SELECT * FROM movie WHERE movie_name = '$movie' AND movie_id != $id";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
@@ -15,7 +17,7 @@ function exists_movie($movie, $id) {
 }
 
 function exists_person($people, $id) {
-	$query = "SELECT * FROM people WHERE people_fullname = '$people' AND movie_id != $id";
+	$query = "SELECT * FROM people WHERE people_fullname = '$people' AND people_id != $id";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	$line = mysql_fetch_array($result, MYSQL_ASSOC);
 	mysql_free_result($result);
@@ -49,11 +51,11 @@ function edit_movie($movie_id, $movie_name, $movie_type, $movie_year, $movie_lea
 }
 
 function add_actor($people) {
-	add_people($people, 1, 0);
+	add_person($people, 1, 0);
 }
 
 function add_director($people) {
-	add_people($people, 0, 1);
+	add_person($people, 0, 1);
 }
 
 function make_actor($people) {
@@ -79,12 +81,12 @@ $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . 
 mysql_select_db('movies') or die('Couldn\'t select database.');
 
 // Pass parameters to session and count empty fields
+$field_var = $_REQUEST['action'].'_'.$_REQUEST['object'].'_fields';
+$fields = $$field_var; // For example, $add_movie_fields, which is defined in variables/fields.php
+var_dump($field_var);
+var_dump($fields);
+
 if ($_REQUEST['object'] == 'movie') {
-	if ($_REQUEST['action'] == 'add') {
-		$fields = ['movie_name', 'movie_type', 'movie_year', 'movie_director', 'movie_leadactor'];
-	} else if ($_REQUEST['action'] == 'edit') {
-		$fields = ['movie_id', 'movie_name', 'movie_type', 'movie_year', 'movie_director', 'movie_leadactor'];
-	}
 	$req_fields = $fields;
 	$empty_req_fields = 0;
 	foreach ($fields as $value) {
