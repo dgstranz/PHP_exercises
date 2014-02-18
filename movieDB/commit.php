@@ -6,16 +6,16 @@
 <?php
 session_start();
 
-function exists_movie($movie) {
-	$query = "SELECT * FROM movie WHERE movie_name = '$movie'";
+function exists_movie($movie, $id) {
+	$query = "SELECT * FROM movie WHERE movie_name = '$movie' AND movie_id != $id";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	$line = mysql_fetch_array($result, MYSQL_ASSOC);
 	mysql_free_result($result);
 	return !empty($line);
 }
 
-function exists_person($people) {
-	$query = "SELECT * FROM people WHERE people_fullname = '$people'";
+function exists_person($people, $id) {
+	$query = "SELECT * FROM people WHERE people_fullname = '$people' AND movie_id != $id";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	$line = mysql_fetch_array($result, MYSQL_ASSOC);
 	mysql_free_result($result);
@@ -32,6 +32,18 @@ function add_movie($movie_name, $movie_type, $movie_year, $movie_leadactor, $mov
 function add_person($people_fullname, $people_isactor, $people_isdirector) {
 	$query = "INSERT INTO people (people_fullname, people_isactor, people_isdirector)
 				VALUES ('$people_fullname', $people_isactor, $people_isdirector)";
+	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
+	return $result;
+}
+
+function edit_movie($movie_id, $movie_name, $movie_type, $movie_year, $movie_leadactor, $movie_director) {
+	$query = "UPDATE movie
+				SET movie_name = '$movie_name',
+					movie_type = $movie_type,
+					movie_year = $movie_year,
+					movie_leadactor = $movie_leadactor,
+					movie_director = $movie_director
+				WHERE movie_id = $movie_id";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	return $result;
 }
@@ -70,26 +82,38 @@ mysql_select_db('movies') or die('Couldn\'t select database.');
 if ($_REQUEST['object'] == 'movie') {
 	if ($_REQUEST['action'] == 'add') {
 		$fields = ['movie_name', 'movie_type', 'movie_year', 'movie_director', 'movie_leadactor'];
-		$req_fields = $fields;
-		$empty_req_fields = 0;
-		foreach ($fields as $value) {
-			$_SESSION[$value] = $_REQUEST[$value];
-		}
-		foreach ($req_fields as $value) {
-			if (empty($_SESSION[$value])) $empty_req_fields++;
-		}
+	} else if ($_REQUEST['action'] == 'edit') {
+		$fields = ['movie_id', 'movie_name', 'movie_type', 'movie_year', 'movie_director', 'movie_leadactor'];
+	}
+	$req_fields = $fields;
+	$empty_req_fields = 0;
+	foreach ($fields as $value) {
+		$_SESSION[$value] = $_REQUEST[$value];
+	}
+	foreach ($req_fields as $value) {
+		if (empty($_SESSION[$value])) $empty_req_fields++;
+	}
 
-		if ($empty_req_fields) {
-			echo 'The form is not filled.<br />';
-			//sleep(5);
-			//header('Location: '.$_SERVER['HTTP_REFERER']);
-		} else if (exists_movie($_SESSION['movie_name'])) {
+	if ($empty_req_fields) {
+		echo 'The form is not filled.<br />';
+		//sleep(5);
+		//header('Location: '.$_SERVER['HTTP_REFERER']);
+	} else if ($_REQUEST['action'] == 'add') {
+		if (exists_movie($_SESSION['movie_name'], -1)) {
 			echo 'A movie called '.$_SESSION['movie_name'].' already exists in our database.<br />';
 		} else {
 			add_movie($_SESSION['movie_name'], $_SESSION['movie_type'], $_SESSION['movie_year'], $_SESSION['movie_leadactor'], $_SESSION['movie_director']);
 			echo 'Movie added.<br />';
 		}
+	} else if ($_REQUEST['action'] == 'edit') {
+		if (exists_movie($_SESSION['movie_name'], $_SESSION['movie_id'])) {
+			echo 'A movie called '.$_SESSION['movie_name'].' already exists in our database.<br />';
+		} else {
+			edit_movie($_SESSION['movie_id'], $_SESSION['movie_name'], $_SESSION['movie_type'], $_SESSION['movie_year'], $_SESSION['movie_leadactor'], $_SESSION['movie_director']);
+			echo 'Movie updated.<br />';
+		}
 	}
+
 } else if ($_REQUEST['object'] == 'person') {
 	if ($_REQUEST['action'] == 'add') {
 		$req_fields = ['people_fullname'];
@@ -113,7 +137,7 @@ if ($_REQUEST['object'] == 'movie') {
 			echo 'The form is not filled.<br />';
 			//sleep(5);
 			//header('Location: '.$_SERVER['HTTP_REFERER']);
-		} else if (exists_person($_SESSION['people_fullname'])) {
+		} else if (exists_person($_SESSION['people_fullname'], -1)) {
 			echo 'A person called '.$_SESSION['people_fullname'].' already exists in our database.<br />';
 		} else if ($job_counter == 0) {
 			echo 'Cannot add people with no job.<br />';

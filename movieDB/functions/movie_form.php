@@ -1,5 +1,9 @@
 <?php
 
+function movie_id_field($default) {
+	echo '<input type="hidden" name="movie_id" '.(!empty($default) ? 'value="'.$default.'"' : '').'>';
+}
+
 function movie_title_field($default) {
 	echo '<tr>
 			<td>Name:</td>
@@ -76,6 +80,7 @@ function print_movie_form($default_array, $destination_uri) {
 		<form action="'.$destination_uri.'" method="post">
 			<table>';
 
+	movie_id_field(isset($default_array['movie_id']) ? $default_array['movie_id'] : '');
 	movie_title_field(isset($default_array['movie_name']) ? $default_array['movie_name'] : '');
 	movie_genre_field(isset($default_array['movie_type']) ? $default_array['movie_type'] : '');
 	movie_year_field(isset($default_array['movie_year']) ? $default_array['movie_year'] : '');

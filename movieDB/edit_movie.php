@@ -17,14 +17,14 @@ $select = 'SELECT * FROM movie WHERE movie_id='.$_GET['id'];
 $result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
 $line = mysql_fetch_array($result, MYSQL_ASSOC);
 
-$fields = ['movie_name', 'movie_type', 'movie_year', 'movie_director', 'movie_leadactor'];
+$fields = ['movie_id', 'movie_name', 'movie_type', 'movie_year', 'movie_director', 'movie_leadactor'];
 $movie = [];
 $empty_fields = 0;
 foreach ($fields as $value) {
 	$movie[$value] = $line[$value];
 }
 
-print_movie_form($movie, 'commit.php');
+print_movie_form($movie, 'commit.php?action=edit&object=movie');
 
 // Close connection
 mysql_close($handle);
