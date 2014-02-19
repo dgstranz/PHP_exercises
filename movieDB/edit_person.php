@@ -7,24 +7,24 @@
 session_start();
 
 include 'functions/id_to_string.php';
-include 'functions/movie_form.php';
+include 'functions/person_form.php';
 include 'variables/fields.php';
 
 // Open connection, select database and execute query
 $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . mysql_error());
 mysql_select_db('movies') or die('Couldn\'t select database.');
 
-$select = 'SELECT * FROM movie WHERE movie_id='.$_GET['id'];
+$select = 'SELECT * FROM people WHERE people_id='.$_GET['id'];
 $result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
 $line = mysql_fetch_array($result, MYSQL_ASSOC);
 
-$fields = $edit_movie_fields;
-$movie = [];
+$fields = $edit_person_fields;
+$person = [];
 foreach ($fields as $value) {
-	$movie[$value] = $line[$value];
+	$person[$value] = $line[$value];
 }
 
-print_movie_form($movie, 'commit.php?action=edit&object=movie');
+print_person_form($person, 'commit.php?action=edit&object=person');
 
 // Close connection
 mysql_close($handle);
