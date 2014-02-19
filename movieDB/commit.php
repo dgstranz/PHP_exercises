@@ -50,6 +50,16 @@ function edit_movie($movie_id, $movie_name, $movie_type, $movie_year, $movie_lea
 	return $result;
 }
 
+function edit_person($people_id, $people_fullname, $people_isactor, $people_isdirector) {
+	$query = "UPDATE people
+				SET people_fullname = '$people_fullname',
+					people_isactor = $people_isactor,
+					people_isdirector = $people_isdirector
+				WHERE people_id = $people_id";
+	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
+	return $result;
+}
+
 function add_actor($people) {
 	add_person($people, 1, 0);
 }

@@ -17,12 +17,13 @@ function person_job_field($default_isactor, $default_isdirector) {
 			<input type="hidden" name="people_isdirector" value="0" />
 			
 			<td>Job(s):</td>
-			<td><input type="checkbox" name="people_isactor" value="1" '.(!empty($default_isactor) ? 'selected' : '').'>Actor</input><br>
-				<input type="checkbox" name="people_isdirector" value="1" '.(!empty($default_isdirector) ? 'selected' : '').'>Director</input><br>
+			<td><input type="checkbox" name="people_isactor" value="1" '.(!empty($default_isactor) ? 'checked' : '').'>Actor</input><br>
+				<input type="checkbox" name="people_isdirector" value="1" '.(!empty($default_isdirector) ? 'checked' : '').'>Director</input><br>
 		</tr>';
 }
 
 function print_person_form($default_array, $destination_uri) {
+	var_dump($default_array);
 	echo '
 		<form action="'.$destination_uri.'" method="post">
 			<table>';
