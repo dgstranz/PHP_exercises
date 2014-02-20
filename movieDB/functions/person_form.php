@@ -23,7 +23,6 @@ function person_job_field($default_isactor, $default_isdirector) {
 }
 
 function print_person_form($default_array, $destination_uri) {
-	var_dump($default_array);
 	echo '
 		<form action="'.$destination_uri.'" method="post">
 			<table>';
@@ -35,7 +34,8 @@ function print_person_form($default_array, $destination_uri) {
 				
 	echo '			<tr>
 					<td></td>
-					<td><input type="submit" value="Submit" /></td>
+					<td><input type="submit" value="Submit" />
+						<input type="button" value="Back" onClick="history.go(-1);return true;" /></td>
 				</tr>
 			</table>
 		</form>';

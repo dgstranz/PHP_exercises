@@ -89,7 +89,8 @@ function print_movie_form($default_array, $destination_uri) {
 				
 	echo '			<tr>
 					<td></td>
-					<td><input type="submit" value="Submit" /></td>
+					<td><input type="submit" value="Submit" />
+						<input type="button" value="Back" onClick="history.go(-1);return true;" /></td>
 				</tr>
 			</table>
 		</form>';
