@@ -15,13 +15,12 @@ foreach ($fields as $value) {
 	if (!isset($_SESSION[$value])) $_SESSION[$value] = '';
 }
 
-
-var_dump($_SESSION);
-
 // Open connection, select database and execute query
 $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . mysql_error());
 mysql_select_db('movies') or die('Couldn\'t select database.');
 
+
+echo '<h1>Add person</h1>';
 print_person_form($_SESSION, 'commit.php?action=add&object=person');
 
 // Close connection

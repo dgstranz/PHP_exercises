@@ -24,6 +24,8 @@ foreach ($fields as $value) {
 	$movie[$value] = $line[$value];
 }
 
+
+echo '<h1>Edit movie</h1>';
 print_movie_form($movie, 'commit.php?action=edit&object=movie');
 
 // Close connection

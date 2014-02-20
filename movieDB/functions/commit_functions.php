@@ -48,27 +48,13 @@ function edit_movie($movie_id, $movie_name, $movie_type, $movie_year, $movie_lea
 }
 
 function edit_person($people_id, $people_fullname, $people_isactor, $people_isdirector) {
+	if (!$people_isactor) delete_actor_instances($people_id);
+	if (!$people_isdirector) delete_director_instances($people_id);
 	$query = "UPDATE people
 				SET people_fullname = '$people_fullname',
 					people_isactor = $people_isactor,
 					people_isdirector = $people_isdirector
 				WHERE people_id = $people_id";
-	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
-	return $result;
-}
-
-function make_actor($people) {
-	$query = "UPDATE people
-				SET people_isactor=1
-				WHERE people_fullname=$people";
-	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
-	return $result;
-}
-
-function make_director($people) {
-	$query = "UPDATE people
-				SET people_isdirector=1
-				WHERE people_fullname=$people";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	return $result;
 }
@@ -85,6 +71,7 @@ function delete_actor_instances($people_id) {
 				WHERE movie_leadactor = $people_id";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	return $result;
+}
 
 function delete_director_instances($people_id) {
 	$query = "UPDATE movie
@@ -92,6 +79,7 @@ function delete_director_instances($people_id) {
 				WHERE movie_director = $people_id";
 	$result = mysql_query($query) or die('Couldn\'t execute query: ' . mysql_error());
 	return $result;
+}
 
 function delete_person_instances($people_id) {
 	return delete_actor_instances($people_id)

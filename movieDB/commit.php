@@ -36,6 +36,7 @@ if ($empty_req_fields) {
 			echo 'A movie called '.$_SESSION['movie_name'].' already exists in our database.<br />';
 		} else if (add_movie($_SESSION['movie_name'], $_SESSION['movie_type'], $_SESSION['movie_year'], $_SESSION['movie_leadactor'], $_SESSION['movie_director'])) {
 			echo 'Movie added.<br />';
+			session_destroy();
 		} else {
 			echo 'Error while trying to add movie.<br />';
 		}
@@ -44,12 +45,14 @@ if ($empty_req_fields) {
 			echo 'A movie called '.$_SESSION['movie_name'].' already exists in our database.<br />';
 		} else if (edit_movie($_SESSION['movie_id'], $_SESSION['movie_name'], $_SESSION['movie_type'], $_SESSION['movie_year'], $_SESSION['movie_leadactor'], $_SESSION['movie_director'])) {
 			echo 'Movie updated.<br />';
+			session_destroy();
 		} else {
 			echo 'Error while trying to update movie.<br />';
 		}
 	} else if ($_REQUEST['action'] == 'delete') {
 		if (delete_movie($_SESSION['movie_id'])) {
 			echo 'Movie successfully deleted.<br />';
+			session_destroy();
 		} else {
 			echo 'Error while trying to delete movie.<br />';
 		}
@@ -65,6 +68,7 @@ if ($empty_req_fields) {
 			echo 'Cannot add people with no job.<br />';
 		} else if (add_person($_SESSION['people_fullname'], $_SESSION['people_isactor'], $_SESSION['people_isdirector'])) {
 			echo 'Person added.<br />';
+			session_destroy();
 		} else {
 			echo 'Error while trying to add person.<br />';
 		}
@@ -77,14 +81,15 @@ if ($empty_req_fields) {
 			echo 'Cannot store people with no jobs.<br />';
 		} else if (edit_person($_SESSION['people_id'], $_SESSION['people_fullname'], $_SESSION['people_isactor'], $_SESSION['people_isdirector'])) {
 			echo 'Person updated.<br />';
+			session_destroy();
 		} else {
 			echo 'Error while trying to update person.<br />';
 		}
 	} else if ($_REQUEST['action'] == 'delete') {
-		var_dump($_SESSION);
 		delete_person_instances($_SESSION['people_id']);
 		if (delete_person($_SESSION['people_id'])) {
 			echo 'Person successfully deleted.<br />';
+			session_destroy();
 		} else {
 			echo 'Error while trying to delete person.<br />';
 		}

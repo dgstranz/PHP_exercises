@@ -52,7 +52,7 @@ function movie_director_field($default) {
 	}
 	mysql_free_result($result);
 
-	echo '</select> <a href="add_people.php">Not here?</a></td>
+	echo '</select> <a href="add_person.php">Not here?</a></td>
 		</tr>';
 }
 
@@ -71,7 +71,7 @@ function movie_actor_field($default) {
 	}
 	mysql_free_result($result);
 
-	echo '</select> <a href="add_people.php">Not here?</a></td>
+	echo '</select> <a href="add_person.php">Not here?</a></td>
 		</tr>';
 }
 
