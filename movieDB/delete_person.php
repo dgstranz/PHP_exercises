@@ -25,16 +25,11 @@ if ($line['people_isactor'] > 0) echo '<li>Actor</li>';
 if ($line['people_isdirector'] > 0) echo '<li>Director</li>';
 echo '</ul>';
 
-/*$select = 'DELETE FROM people WHERE people_id='.$_GET['id'];
-$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
-
-if ($result) {
-	echo 'Person successfully deleted.<br />';
-} else {
-	echo 'Cannot delete this person.<br />';
-}*/
-
-echo '<a href="index.php">Go back</a>';
+echo '<form action="commit.php?action=delete&object=person" method="post">
+		<input type="hidden" name="people_id" value="'.$_REQUEST['id'].'" />
+		<input type="submit" value="Submit" />
+		<input type="button" value="Back" onClick="history.go(-1);return true;" />
+	</form>';
 
 // Close connection
 mysql_close($handle);

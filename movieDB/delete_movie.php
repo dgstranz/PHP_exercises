@@ -12,7 +12,7 @@ include 'functions/id_to_string.php';
 $handle = mysql_connect('localhost', 'root', '') or die('Couldn\'t connect: ' . mysql_error());
 mysql_select_db('movies') or die('Couldn\'t select database.');
 
-$select = 'SELECT * FROM movie WHERE movie_id='.$_GET['id'];
+$select = 'SELECT * FROM movie WHERE movie_id='.$_REQUEST['id'];
 $result = mysql_query($select) or die('Cannot execute query: ' . mysql_error());
 $line = mysql_fetch_array($result, MYSQL_ASSOC);
 
@@ -26,16 +26,8 @@ echo '<li>Director: '.get_person($line['movie_director']).'</li>';
 echo '<li>Lead actor: '.get_person($line['movie_leadactor']).'</li>';
 echo '</ul>';
 
-/*$select = 'DELETE FROM movie WHERE movie_id='.$_GET['id'];
-$result = mysql_query($select) or die('Couldn\'t execute query: ' . mysql_error());
-
-if ($result) {
-	echo 'Movie successfully deleted.<br />';
-} else {
-	echo 'Cannot delete this movie.<br />';
-}*/
-
 echo '<form action="commit.php?action=delete&object=movie" method="post">
+		<input type="hidden" name="movie_id" value="'.$_REQUEST['id'].'" />
 		<input type="submit" value="Submit" />
 		<input type="button" value="Back" onClick="history.go(-1);return true;" />
 	</form>';
