@@ -1,6 +1,25 @@
+<html>
+<head>
+	<title>Aguja y pajar</title>
+	<meta charset="utf-8">
+</head>
 <?php
 	$aguja;
 	$pajar;
+	$pos = array();
+
+	if (!isset($_POST['aguja']) || !isset($_POST['pajar'])) {
+		print_form();
+	} elseif (empty($_POST['aguja']) || empty($_POST['pajar'])) {
+		echo '<b>Error:</b> Alguno de los campos está vacío. Redireccionando en 5 segundos...';
+		header('refresh: 5, url=index.php');
+	} else {
+		$aguja = $_POST['aguja'];
+		$pajar = $_POST['pajar'];
+		print_form();
+		$pos = buscar_pos($aguja, $pajar);
+		visualizar($pos);
+	}
 
 	function print_form() {
 		global $aguja;
@@ -22,30 +41,40 @@
 
 	function buscar_pos($aguja, $pajar) {
 		$pos_actual = 0;
-		$pos_max = strlen($pajar);
 		$num_ocurrencias = 0;
-		$pos = [];
-		$i = 0;
+		$pos = array();
 
-		while (strpos($pajar, $aguja, $pos_actual)) {
-			$valor = strpos($pajar, $aguja, $pos_actual);
-			$pos[$num_ocurrencias] = $valor;
+		while (($valor = stripos($pajar, $aguja, $pos_actual)) !== false) {
+			$pos[sizeof($pos)] = $valor;
 			$pos_actual = $valor + 1;
-			$num_ocurrencias++;
 		}
 
-		if (empty($pos)) return 'FALSE';
-		else return var_dump($pos);
+		return $pos;
 	}
 
-	if(!empty($_POST['aguja']) && !empty($_POST['pajar'])) {
-		$aguja = $_POST['aguja'];
-		$pajar = $_POST['pajar'];
-		print_form();
-		echo buscar_pos($aguja, $pajar);
-	} else {
-		$aguja = '';
-		$pajar = '';
-		print_form();
+	function visualizar($pos) {
+		global $aguja;
+
+		switch ($pos) {
+			case !isset($pos):
+				echo '<h2>No se ha encontrado la cadena "' . $aguja . '".</h2>';
+				break;
+
+			case sizeof($pos) == 1:
+				echo '<h2>Se ha encontrado la cadena "' . $aguja . '" 1 vez.</h2>';
+				echo '<b>Posición:</b> ' . $pos[0];
+				break;
+			
+			default:
+				echo '<h2>Se ha encontrado la cadena "' . $aguja . '" ' . sizeof($pos) . ' ' . (sizeof($pos) > 1 ? 'veces' : 'vez') . '.</h2>';
+				echo '<ol><b>Posiciones:</b>';
+				foreach ($pos as $key => $value) {
+					echo '<li>' . $value . '</li>';
+				}
+				echo '</ol>';
+				break;
+		}
 	}
 ?>
+</body>
+</html>
