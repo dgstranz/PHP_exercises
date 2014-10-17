@@ -12,8 +12,6 @@
 	$palabras_aguja = array();
 	$palabras_pajar = array();
 
-	var_dump($_POST);
-
 	if (!isset($_POST['aguja']) || !isset($_POST['pajar'])) {
 		print_form();
 	} elseif (empty($_POST['aguja']) || empty($_POST['pajar'])) {
@@ -46,13 +44,17 @@
 					</tr>
 					<tr>
 						<td>Buscar:</td>
-						<td><input type="text" name="aguja" value="'.$aguja.'" /></td>
+						<td><input type="text" name="aguja" value="'.$aguja.'"></td>
+					</tr>
+					<tr>
+						<td>Posiciones:</td>
+						<td><input type="checkbox" name="pos" checked>Mostrar posiciones</td>
 					</tr>
 					<tr>
 						<td colspan="2">
-							<input type="submit" name="cadena" value="Buscar cadena" />
-							<input type="submit" name="palabra" value="Buscar palabra" />
-							<input type="reset" value="Borrar" />
+							<input type="submit" name="cadena" value="Buscar cadena">
+							<input type="submit" name="palabra" value="Buscar palabra">
+							<input type="reset" value="Borrar">
 						</td>
 					</tr>
 				</table>
@@ -109,30 +111,23 @@
 	function visualizar($pos) {
 		global $aguja;
 		global $pajar;
-		$cont_pos = 0;
-		$cont_pajar = 0;
 
-		var_dump($pos);
-		var_dump($pajar);
-
-		switch ($pos) {
-			case !isset($pos):
-				echo '<h2>No se ha encontrado la cadena "' . $aguja . '".</h2>';
-				break;
-
-			case sizeof($pos) == 1:
-				echo '<h2>Se ha encontrado la cadena "' . $aguja . '" 1 vez.</h2>';
+		if (empty($pos)) {
+			echo '<h2>No se ha encontrado "' . $aguja . '".</h2>';
+		} elseif (isset($_POST['pos'])) {
+			if (sizeof($pos) == 1) {
+				echo '<h2>Se ha encontrado "' . $aguja . '" 1 vez.</h2>';
 				echo '<b>Posición:</b> ' . $pos[0];
-				break;
-			
-			default:
-				echo '<h2>Se ha encontrado la cadena "' . $aguja . '" ' . sizeof($pos) . ' ' . (sizeof($pos) > 1 ? 'veces' : 'vez') . '.</h2>';
+			} else {
+				echo '<h2>Se ha encontrado "' . $aguja . '" ' . sizeof($pos) . ' ' . (sizeof($pos) > 1 ? 'veces' : 'vez') . '.</h2>';
 				echo '<ol><b>Posiciones:</b>';
 				foreach ($pos as $key => $value) {
 					echo '<li>' . $value . '</li>';
 				}
 				echo '</ol>';
-				break;
+			}
+		} else {
+			echo '<h2>Se ha encontrado "' . $aguja .'".</h2>';
 		}
 	}
 ?>
