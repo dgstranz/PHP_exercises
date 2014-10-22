@@ -11,7 +11,15 @@
 		}
 	}
 
+	if (!isset($_COOKIE['id'])) {
+		setcookie('id', uniqid(), time()+3600);
+		header('Location: ' .  $_SERVER['PHP_SELF']);
+	}
+
 	if (!isset($_GET['operacion']) || $_GET['operacion'] != 'confirmar') {
+		formulario_evento();
+	} else if ($_POST['id'] != $_COOKIE['id']) {
+		echo 'Error: el identificador ha expirado.';
 		formulario_evento();
 	} else {
 		validar();
@@ -21,21 +29,22 @@
 		global $year, $month, $day, $hour, $minute, $title, $comment;
 		$months = [null, 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-		echo '<form action="index.php?operacion=confirmar" method="POST">';
+		echo '<form action="' . $_SERVER['PHP_SELF'] . '?operacion=confirmar" method="POST">';
+		echo '<input type="hidden" name="id" value="' . $_COOKIE['id'] . '">';
 
 		echo 'Día: <select name="day">';
 		echo '<option value="-1"></option>';
 		for($i = 1; $i <= 31 ; $i++) {
 			echo '<option value="' . $i . '"' . ((isset($day) && $day == $i) ? ' selected' : '') . '>'.$i.'</option>';
 		}
-		echo '</select>';
+		echo '</select> ';
 
 		echo 'Mes: <select name="month">';
 		echo '<option value="-1"></option>';
 		for($i = 1; $i <= 12 ; $i++) {
 			echo '<option value="' . $i . '"' . ((isset($month) && $month == $i) ? ' selected' : '') . '>'.$months[$i].'</option>';
 		}
-		echo '</select>';
+		echo '</select> ';
 
 		echo 'Año: <select name="year">';
 		echo '<option value="-1"></option>';
@@ -62,7 +71,7 @@
 		echo 'Comentario:<br><textarea name="comment" rows="4" cols="40">';
 		echo '</textarea><br>';
 
-		echo '<input type="submit" />';
+		echo '<input type="submit">';
 		echo '</form>';
 	}
 
